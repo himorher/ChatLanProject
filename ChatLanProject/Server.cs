@@ -56,25 +56,24 @@ namespace ChatLanProject
             Socket cli = (Socket)obj;
             try
             {
-                byte[] data = new byte[1024 * 200];
+                byte[] data = new byte[1024 * 2000 * 1024];
                 while (true)
                 {
                     //byte[] data = new byte[1024 * 200];
                     cli.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
                     byte[] temp = data[1..];
-                    
+
+                    foreach(Socket item in listClient)
+                    {
+                        if (item != null && item != cli) item.Send(data);
+                    }
                     if (mess[0] == '*')
                     {
-                       //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                        string mess_new = Encoding.UTF8.GetString(data);
+                        //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                        string mess_new = Encoding.UTF8.GetString(temp);
                         //string.Join("", newmess);
                         listView1.Items.Add(mess_new);
-                        
-                        foreach (Socket item in listClient)
-                        {
-                            if (item != null && item != cli) item.Send(temp);
-                        }
                     }
                     else
                     {
@@ -125,3 +124,6 @@ namespace ChatLanProject
         }
     }
 }
+
+//đang soạn pp
+//ai nhớ chức danh thầy nhiệm là tiến sĩ hay gì khum

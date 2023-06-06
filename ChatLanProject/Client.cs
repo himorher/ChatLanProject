@@ -93,17 +93,15 @@ namespace ChatLanProject
             SendFile client_Send_File = new SendFile();
             client_Send_File.Show();
         }
-        void receive(object obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
+        void receive() // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
         {
-            // Socket cli = obj as Socket;
-            Socket cli = (Socket)obj;
             try
             {
-                byte[] data = new byte[1024 * 200];
+                byte[] data = new byte[1024 * 2000 * 1024];
                 while (true)
                 {
                     //byte[] data = new byte[1024 * 200];
-                    cli.Receive(data);
+                    client.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
                     byte[] temp = data[1..];
 
@@ -121,7 +119,7 @@ namespace ChatLanProject
                     }
                     else
                     {
-                        doChat(cli, data);
+                        doChat(client, data);
                     }
 
                 }
@@ -129,7 +127,7 @@ namespace ChatLanProject
             catch
             {
                 //listClient.Remove(cli);
-                cli.Close();
+                client.Shutdown(SocketShutdown.Both);
             }
         }
         void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
@@ -139,22 +137,23 @@ namespace ChatLanProject
                 //byte[] clientData = new byte[1024 * 1024 * 5];
                 //clientSocket.Receive(clientData);
                 //int receivedBytesLen = clientSocket.Receive(clientData);
+                listView1.Items.Add("Xử lý file..");
                 string mess = Encoding.UTF8.GetString(data);
-                listView1.Items.Add(mess);
+                //listView1.Items.Add(mess);
                 int fileNameLen = BitConverter.ToInt32(data, 0);
                 string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
                 string name = Path.GetFileName(fileName);
-                using (var file = File.Create("D:\\test\\" + name))
+                using (var file = File.Create("F:\\Ky 4\\" + name))
                 {
                     file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
                 }
                 //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.Create));
                 //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
-                listView1.Items.Add("file sent!");
+                //listView1.Items.Add("file sent!");
                 //bWrite.Close();
                 clientSocket.Close();
                 //[0]filenamelen[4]filenamebyte[*]filedata   
-                listView1.Items.Add("getting files..");
+                listView1.Items.Add("Client đã gửi nhận file thành công.");
             }
             catch (Exception ex)
             {

@@ -51,7 +51,7 @@ namespace ChatLanProject
             if (files != null && files.Length != 0)
             {
                 //Console.WriteLine(files[0]);
-                MessageBox.Show("Da gui file thanh cong");
+                MessageBox.Show("Đã gửi file thành công");
                 sendfile(files[0]);
                 
             }
