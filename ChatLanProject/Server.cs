@@ -87,16 +87,23 @@ namespace ChatLanProject
             }
         }
         void doChat(Socket clientSocket) //nhan file va xu ly
-        {         
+        {
+            listView1.Items.Add("getting files..");
             byte[] clientData = new byte[1024 * 5000];
             int receivedBytesLen = clientSocket.Receive(clientData);
             int fileNameLen = BitConverter.ToInt32(clientData, 0);
             string fileName = Encoding.ASCII.GetString(clientData, 4, fileNameLen);
-            BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.CreateNew));
-            bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
-            bWrite.Close();
-            clientSocket.Close();
-            listView1.Items.Add("getting files..");
+            
+            FileStream fs = new FileStream(fileName, FileMode.Create);
+            StreamWriter streamWriter = new StreamWriter(fs, Encoding.UTF8);
+            streamWriter.Write(clientData);
+            streamWriter.Close();
+            fs.Close();
+            //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.CreateNew));
+            //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
+            listView1.Items.Add("file sent!");
+            //bWrite.Close();
+            clientSocket.Close();            
             //[0]filenamelen[4]filenamebyte[*]filedata   
 
         }
