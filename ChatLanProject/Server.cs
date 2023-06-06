@@ -59,11 +59,15 @@ namespace ChatLanProject
                     byte[] data = new byte[1024 * 200];
                     cli.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
+                    byte[] temp = data[1..];
+                    
                     if (mess[0] == '*')
                     {
-                        string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                        listView1.Items.Add(mess);
-                        byte[] temp = data[5..];
+                       //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                        string mess_new = Encoding.UTF8.GetString(data);
+                        //string.Join("", newmess);
+                        listView1.Items.Add(mess_new);
+                        
                         foreach (Socket item in listClient)
                         {
                             if (item != null && item != cli) item.Send(temp);
@@ -88,7 +92,7 @@ namespace ChatLanProject
             int receivedBytesLen = clientSocket.Receive(clientData);
             int fileNameLen = BitConverter.ToInt32(clientData, 0);
             string fileName = Encoding.ASCII.GetString(clientData, 4, fileNameLen);
-            BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.Create));
+            BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.CreateNew));
             bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
             bWrite.Close();
             clientSocket.Close();
