@@ -34,20 +34,22 @@
             // 
             // listView1
             // 
-            listView1.Location = new Point(28, 83);
+            listView1.Location = new Point(12, 65);
             listView1.Name = "listView1";
-            listView1.Size = new Size(760, 355);
+            listView1.Size = new Size(1013, 457);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.List;
             // 
             // button1
             // 
-            button1.Location = new Point(679, 23);
+            button1.Font = new Font("Arial", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = Color.DarkTurquoise;
+            button1.Location = new Point(804, 12);
             button1.Name = "button1";
-            button1.Size = new Size(94, 29);
+            button1.Size = new Size(221, 47);
             button1.TabIndex = 1;
-            button1.Text = "Start";
+            button1.Text = "START";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -55,7 +57,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1037, 543);
             Controls.Add(button1);
             Controls.Add(listView1);
             Name = "Server";

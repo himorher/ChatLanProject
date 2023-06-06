@@ -64,7 +64,22 @@ namespace ChatLanProject
                     string mess = Encoding.UTF8.GetString(data);
                     byte[] temp = data[1..];
 
-                    foreach(Socket item in listClient)
+                    //if (mess[0] == '*')
+                    //{
+                    //    foreach (Socket item in listClient)
+                    //    {
+                    //        if (item != null && item != cli) item.Send(data);
+                    //    }
+                    //    //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                    //    string mess_new = Encoding.UTF8.GetString(temp);
+                    //    //string.Join("", newmess);
+                    //    listView1.Items.Add(mess_new);
+                    //}
+                    //else
+                    //{
+                    //    doChat(cli, data);
+                    //}
+                    foreach (Socket item in listClient)
                     {
                         if (item != null && item != cli) item.Send(data);
                     }
@@ -100,7 +115,7 @@ namespace ChatLanProject
                 int fileNameLen = BitConverter.ToInt32(data, 0);
                 string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
                 string name = Path.GetFileName(fileName);
-                using (var file = File.Create("D:\\test\\" + name))
+                using (var file = File.Create("D:\\testServer\\" + name))
                 {
                     file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
                 }
@@ -124,6 +139,3 @@ namespace ChatLanProject
         }
     }
 }
-
-//đang soạn pp
-//ai nhớ chức danh thầy nhiệm là tiến sĩ hay gì khum

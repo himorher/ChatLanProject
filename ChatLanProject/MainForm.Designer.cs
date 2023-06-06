@@ -34,21 +34,25 @@
             // 
             // button1
             // 
-            button1.Location = new Point(266, 73);
+            button1.Font = new Font("Arial", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = Color.ForestGreen;
+            button1.Location = new Point(198, 38);
             button1.Name = "button1";
-            button1.Size = new Size(213, 66);
+            button1.Size = new Size(307, 62);
             button1.TabIndex = 0;
-            button1.Text = "Server";
+            button1.Text = "SERVER";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(266, 194);
+            button2.Font = new Font("Arial", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            button2.ForeColor = Color.MediumVioletRed;
+            button2.Location = new Point(198, 124);
             button2.Name = "button2";
-            button2.Size = new Size(213, 66);
+            button2.Size = new Size(307, 62);
             button2.TabIndex = 1;
-            button2.Text = "Client";
+            button2.Text = "CLIENT";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -56,11 +60,11 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(739, 232);
             Controls.Add(button2);
             Controls.Add(button1);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "MainForm";
             ResumeLayout(false);
         }
 

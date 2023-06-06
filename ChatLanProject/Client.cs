@@ -18,7 +18,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); // dia chi server;
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.1.5"), 55000); // dia chi server;
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         void send(string s) // gui tin nhan
@@ -88,7 +88,7 @@ namespace ChatLanProject
             Close();
         }
 
-        private void button4_Click(object sender, EventArgs e) //button send file
+        private void button4_Click(object sender, EventArgs e) //button attach file
         {
             SendFile client_Send_File = new SendFile();
             client_Send_File.Show();
@@ -127,7 +127,7 @@ namespace ChatLanProject
             catch
             {
                 //listClient.Remove(cli);
-                client.Shutdown(SocketShutdown.Both);
+                //client.Shutdown(SocketShutdown.Both);
             }
         }
         void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
@@ -143,7 +143,7 @@ namespace ChatLanProject
                 int fileNameLen = BitConverter.ToInt32(data, 0);
                 string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
                 string name = Path.GetFileName(fileName);
-                using (var file = File.Create("F:\\Ky 4\\" + name))
+                using (var file = File.Create("D:\\testClient\\" + name))
                 {
                     file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
                 }

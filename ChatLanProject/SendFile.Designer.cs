@@ -31,20 +31,24 @@
             textBox1 = new TextBox();
             button1 = new Button();
             button2 = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(49, 74);
+            textBox1.Location = new Point(15, 39);
+            textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(385, 27);
+            textBox1.Size = new Size(639, 31);
             textBox1.TabIndex = 0;
             // 
             // button1
             // 
-            button1.Location = new Point(556, 77);
+            button1.Font = new Font("Arial", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = Color.Orange;
+            button1.Location = new Point(676, 39);
             button1.Name = "button1";
-            button1.Size = new Size(94, 29);
+            button1.Size = new Size(128, 35);
             button1.TabIndex = 1;
             button1.Text = "Browse";
             button1.UseVisualStyleBackColor = true;
@@ -52,19 +56,32 @@
             // 
             // button2
             // 
-            button2.Location = new Point(354, 205);
+            button2.Font = new Font("Arial", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            button2.ForeColor = Color.RoyalBlue;
+            button2.Location = new Point(334, 100);
             button2.Name = "button2";
-            button2.Size = new Size(94, 29);
+            button2.Size = new Size(173, 44);
             button2.TabIndex = 2;
-            button2.Text = "Send";
+            button2.Text = "SEND";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Arial", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(15, 13);
+            label1.Name = "label1";
+            label1.Size = new Size(91, 19);
+            label1.TabIndex = 3;
+            label1.Text = "FILE PATH";
             // 
             // SendFile
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(857, 176);
+            Controls.Add(label1);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(textBox1);
@@ -79,5 +96,6 @@
         private TextBox textBox1;
         private Button button1;
         private Button button2;
+        private Label label1;
     }
 }
