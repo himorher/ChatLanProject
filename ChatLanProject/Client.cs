@@ -29,23 +29,23 @@ namespace ChatLanProject
             client.Send(data);
         }
 
-        void recieve() // nhan tin nhan
-        {
-            try
-            {
-                while (true)
-                {
-                    byte[] data = new byte[1024 * 200];
-                    client.Receive(data);
-                    string mess = Encoding.UTF8.GetString(data);
-                    listView1.Items.Add(mess);
-                }
-            }
-            catch
-            {
-                Close();
-            }
-        }
+        //void receive() // nhan tin nhan
+        //{
+        //    try
+        //    {
+        //        while (true)
+        //        {
+        //            byte[] data = new byte[1024 * 200];
+        //            client.Receive(data);
+        //            string mess = Encoding.UTF8.GetString(data);
+        //            listView1.Items.Add(mess);
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Close();
+        //    }
+        //}
 
         private void button2_Click(object sender, EventArgs e) //button connect
         {
@@ -61,7 +61,7 @@ namespace ChatLanProject
                     MessageBox.Show("Kết nối lỗi!");
                     return;
                 }
-                Thread listen = new Thread(recieve);
+                Thread listen = new Thread(receive);
                 listen.Start();
                 button2.Text = "Connected";
                 button2.Enabled = false;
@@ -92,6 +92,74 @@ namespace ChatLanProject
         {
             SendFile client_Send_File = new SendFile();
             client_Send_File.Show();
+        }
+        void receive(object obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
+        {
+            // Socket cli = obj as Socket;
+            Socket cli = (Socket)obj;
+            try
+            {
+                byte[] data = new byte[1024 * 200];
+                while (true)
+                {
+                    //byte[] data = new byte[1024 * 200];
+                    cli.Receive(data);
+                    string mess = Encoding.UTF8.GetString(data);
+                    byte[] temp = data[1..];
+
+                    if (mess[0] == '*')
+                    {
+                        //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                        string mess_new = Encoding.UTF8.GetString(data);
+                        //string.Join("", newmess);
+                        listView1.Items.Add(mess_new);
+
+                        //foreach (Socket item in listClient)
+                        //{
+                        //    if (item != null && item != cli) item.Send(temp);
+                        //}
+                    }
+                    else
+                    {
+                        doChat(cli, data);
+                    }
+
+                }
+            }
+            catch
+            {
+                //listClient.Remove(cli);
+                cli.Close();
+            }
+        }
+        void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
+        {
+            try
+            {
+                //byte[] clientData = new byte[1024 * 1024 * 5];
+                //clientSocket.Receive(clientData);
+                //int receivedBytesLen = clientSocket.Receive(clientData);
+                string mess = Encoding.UTF8.GetString(data);
+                listView1.Items.Add(mess);
+                int fileNameLen = BitConverter.ToInt32(data, 0);
+                string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
+                string name = Path.GetFileName(fileName);
+                using (var file = File.Create("D:\\test\\" + name))
+                {
+                    file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
+                }
+                //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.Create));
+                //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
+                listView1.Items.Add("file sent!");
+                //bWrite.Close();
+                clientSocket.Close();
+                //[0]filenamelen[4]filenamebyte[*]filedata   
+                listView1.Items.Add("getting files..");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
