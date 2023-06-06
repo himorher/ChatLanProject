@@ -18,7 +18,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 18000); // dia chi server;
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); // dia chi server;
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         void send(string s) // gui tin nhan
@@ -47,7 +47,7 @@ namespace ChatLanProject
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) //button connect
         {
             CheckForIllegalCrossThreadCalls = false;
             if (textBox1.Text != "")
@@ -70,7 +70,7 @@ namespace ChatLanProject
             else MessageBox.Show("Vui lòng nhập tên!");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //button send
         {
             if (textBox2.Text != "")
             {
@@ -81,14 +81,14 @@ namespace ChatLanProject
             else MessageBox.Show("Vui lòng nhập tin nhắn!");
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e) //button disconnect
         {
             string temp = textBox1.Text + " is disconnected";
             send(temp);
             Close();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e) //button send file
         {
             SendFile client_Send_File = new SendFile();
             client_Send_File.Show();

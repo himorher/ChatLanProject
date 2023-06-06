@@ -9,6 +9,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.Logging;
+using System.IO;
 
 namespace ChatLanProject
 {
@@ -18,7 +20,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 18000);
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
         Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         List<Socket> listClient = new List<Socket>();
 
@@ -41,7 +43,7 @@ namespace ChatLanProject
                 }
                 catch
                 {
-                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 18000);
+                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
                     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 }
 
@@ -54,9 +56,10 @@ namespace ChatLanProject
             Socket cli = (Socket)obj;
             try
             {
+                byte[] data = new byte[1024 * 200];
                 while (true)
                 {
-                    byte[] data = new byte[1024 * 200];
+                    //byte[] data = new byte[1024 * 200];
                     cli.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
                     byte[] temp = data[1..];
@@ -75,7 +78,7 @@ namespace ChatLanProject
                     }
                     else
                     {
-                        doChat(cli);
+                        doChat(cli, data);
                     }
 
                 }
@@ -86,26 +89,34 @@ namespace ChatLanProject
                 cli.Close();
             }
         }
-        void doChat(Socket clientSocket) //nhan file va xu ly
+        void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
         {
-            listView1.Items.Add("getting files..");
-            byte[] clientData = new byte[1024 * 5000];
-            int receivedBytesLen = clientSocket.Receive(clientData);
-            int fileNameLen = BitConverter.ToInt32(clientData, 0);
-            string fileName = Encoding.ASCII.GetString(clientData, 4, fileNameLen);
-            
-            FileStream fs = new FileStream(fileName, FileMode.Create);
-            StreamWriter streamWriter = new StreamWriter(fs, Encoding.UTF8);
-            streamWriter.Write(clientData);
-            streamWriter.Close();
-            fs.Close();
-            //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.CreateNew));
-            //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
-            listView1.Items.Add("file sent!");
-            //bWrite.Close();
-            clientSocket.Close();            
-            //[0]filenamelen[4]filenamebyte[*]filedata   
-
+            try
+            {
+                //byte[] clientData = new byte[1024 * 1024 * 5];
+                //clientSocket.Receive(clientData);
+                //int receivedBytesLen = clientSocket.Receive(clientData);
+                string mess = Encoding.UTF8.GetString(data);
+                listView1.Items.Add(mess);
+                int fileNameLen = BitConverter.ToInt32(data, 0);
+                string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
+                string name = Path.GetFileName(fileName);
+                using (var file = File.Create("D:\\test\\" + name))
+                {
+                    file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
+                }
+                //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.Create));
+                //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
+                listView1.Items.Add("file sent!");
+                //bWrite.Close();
+                clientSocket.Close();
+                //[0]filenamelen[4]filenamebyte[*]filedata   
+                listView1.Items.Add("getting files..");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
