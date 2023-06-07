@@ -21,7 +21,7 @@ namespace ChatLanProject
         }
         private void sendfile(string fn)
         {
-            IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.1.5"), 55000); // dia chi server;
+            IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 51000); // dia chi server;
             Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             string fileName = fn;

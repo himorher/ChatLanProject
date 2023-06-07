@@ -18,7 +18,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.1.5"), 55000); // dia chi server;
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 51000); // dia chi server;
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         void send(string s) // gui tin nhan
@@ -46,7 +46,6 @@ namespace ChatLanProject
         //        Close();
         //    }
         //}
-
         private void button2_Click(object sender, EventArgs e) //button connect
         {
             CheckForIllegalCrossThreadCalls = false;
@@ -96,10 +95,10 @@ namespace ChatLanProject
         void receive() // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
         {
             try
-            {
-                byte[] data = new byte[1024 * 2000 * 1024];
+            {                
                 while (true)
                 {
+                    byte[] data = new byte[1024 * 2000 * 1024];
                     //byte[] data = new byte[1024 * 200];
                     client.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
@@ -108,35 +107,60 @@ namespace ChatLanProject
                     if (mess[0] == '*')
                     {
                         //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                        string mess_new = Encoding.UTF8.GetString(data);
+                        string mess_new = Encoding.UTF8.GetString(temp);
                         //string.Join("", newmess);
                         listView1.Items.Add(mess_new);
-
-                        //foreach (Socket item in listClient)
-                        //{
-                        //    if (item != null && item != cli) item.Send(temp);
-                        //}
                     }
                     else
                     {
                         doChat(client, data);
                     }
-
                 }
             }
-            catch
+            catch 
             {
-                //listClient.Remove(cli);
-                //client.Shutdown(SocketShutdown.Both);
+                client.Close();
             }
         }
+        //            try
+        //    {
+        //        byte[] data = new byte[1024 * 2000 * 1024];
+        //        while (true)
+        //        {
+        //            //byte[] data = new byte[1024 * 200];
+        //            client.Receive(data);
+        //            string mess = Encoding.UTF8.GetString(data);
+        //            byte[] temp = data[1..];
+
+        //            if (mess[0] == '*')
+        //            {
+        //                //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+        //                string mess_new = Encoding.UTF8.GetString(temp);
+        //                //string.Join("", newmess);
+        //                listView1.Items.Add(mess_new);
+
+        //                //foreach (Socket item in listClient)
+        //                //{
+        //                //    if (item != null && item != cli) item.Send(temp);
+        //                //}
+        //            }
+        //            else
+        //            {
+        //                doChat(client, data);
+        //            }
+
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        //listClient.Remove(cli);
+        //        //client.Shutdown(SocketShutdown.Both);
+        //    }
+        //}
         void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
         {
             try
             {
-                //byte[] clientData = new byte[1024 * 1024 * 5];
-                //clientSocket.Receive(clientData);
-                //int receivedBytesLen = clientSocket.Receive(clientData);
                 listView1.Items.Add("Xử lý file..");
                 string mess = Encoding.UTF8.GetString(data);
                 //listView1.Items.Add(mess);
@@ -147,10 +171,6 @@ namespace ChatLanProject
                 {
                     file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
                 }
-                //BinaryWriter bWrite = new BinaryWriter(File.Open(fileName, FileMode.Create));
-                //bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
-                //listView1.Items.Add("file sent!");
-                //bWrite.Close();
                 clientSocket.Close();
                 //[0]filenamelen[4]filenamebyte[*]filedata   
                 listView1.Items.Add("Client đã gửi nhận file thành công.");

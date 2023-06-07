@@ -20,7 +20,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 51000);
         Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         List<Socket> listClient = new List<Socket>();
 
@@ -43,14 +43,14 @@ namespace ChatLanProject
                 }
                 catch
                 {
-                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
+                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 51000);
                     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 }
 
             });
             listen.Start();
         }
-        void receive(object obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
+       void receive(object? obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
         {
             // Socket cli = obj as Socket;
             Socket cli = (Socket)obj;
