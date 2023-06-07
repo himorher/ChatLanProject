@@ -18,10 +18,10 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); // dia chi server;
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); //địa chỉ server;
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        void send(string s) // gui tin nhan
+        void send(string s) //gửi message
         {
             //s = textBox2.Text; message cần gửi
             string mess = "*" + textBox1.Text + ": " + s; // format = name: mess
@@ -29,23 +29,6 @@ namespace ChatLanProject
             client.Send(data);
         }
 
-        //void receive() // nhan tin nhan
-        //{
-        //    try
-        //    {
-        //        while (true)
-        //        {
-        //            byte[] data = new byte[1024 * 200];
-        //            client.Receive(data);
-        //            string mess = Encoding.UTF8.GetString(data);
-        //            listView1.Items.Add(mess);
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        Close();
-        //    }
-        //}
         private void button2_Click(object sender, EventArgs e) //button connect
         {
             CheckForIllegalCrossThreadCalls = false;
@@ -70,7 +53,7 @@ namespace ChatLanProject
             else MessageBox.Show("Vui lòng nhập tên!");
         }
 
-        private void button1_Click(object sender, EventArgs e) //button send
+        private void button1_Click(object sender, EventArgs e) //button send (message)
         {
             if (textBox2.Text != "")
             {
@@ -93,7 +76,7 @@ namespace ChatLanProject
             SendFile client_Send_File = new SendFile();
             client_Send_File.Show();
         }
-        void receive() // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
+        void receive() // hàm nhận message 
         {
             try
             {                
@@ -107,9 +90,7 @@ namespace ChatLanProject
 
                     if (mess[0] == '*')
                     {
-                        //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
                         string mess_new = Encoding.UTF8.GetString(temp);
-                        //string.Join("", newmess);
                         listView1.Items.Add(mess_new);
                     }
                     else
@@ -123,48 +104,14 @@ namespace ChatLanProject
                 client.Close();
             }
         }
-        //            try
-        //    {
-        //        byte[] data = new byte[1024 * 2000 * 1024];
-        //        while (true)
-        //        {
-        //            //byte[] data = new byte[1024 * 200];
-        //            client.Receive(data);
-        //            string mess = Encoding.UTF8.GetString(data);
-        //            byte[] temp = data[1..];
-
-        //            if (mess[0] == '*')
-        //            {
-        //                //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-        //                string mess_new = Encoding.UTF8.GetString(temp);
-        //                //string.Join("", newmess);
-        //                listView1.Items.Add(mess_new);
-
-        //                //foreach (Socket item in listClient)
-        //                //{
-        //                //    if (item != null && item != cli) item.Send(temp);
-        //                //}
-        //            }
-        //            else
-        //            {
-        //                doChat(client, data);
-        //            }
-
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        //listClient.Remove(cli);
-        //        //client.Shutdown(SocketShutdown.Both);
-        //    }
-        //}
         void doChat(Socket clientSocket, byte[] data) //nhan file va xu ly
         {
             try
             {
                 listView1.Items.Add("Xử lý file..");
                 string mess = Encoding.UTF8.GetString(data);
-                //listView1.Items.Add(mess);
+
+                //[0]fileNameLen[4]fileName[*]data 
                 int fileNameLen = BitConverter.ToInt32(data, 0);
                 string fileName = Encoding.ASCII.GetString(data, 4, fileNameLen);
                 string name = Path.GetFileName(fileName);
@@ -172,8 +119,7 @@ namespace ChatLanProject
                 {
                     file.Write(data, 4 + fileNameLen, data.Length - 4 - fileNameLen);
                 }
-                clientSocket.Close();
-                //[0]filenamelen[4]filenamebyte[*]filedata   
+                clientSocket.Close();  
                 listView1.Items.Add("Client đã gửi nhận file thành công.");
             }
             catch (Exception ex)

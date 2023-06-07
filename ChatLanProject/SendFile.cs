@@ -21,7 +21,7 @@ namespace ChatLanProject
         }
         private void sendfile(string fn)
         {
-            IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); // dia chi server;
+            IPEndPoint ipe = new IPEndPoint(IPAddress.Parse("192.168.237.254"), 55000); //địa chỉ server
             Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             string fileName = fn;
@@ -47,13 +47,11 @@ namespace ChatLanProject
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string[] files = path.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] files = path.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries); //chuyển path từ string thành string[]
             if (files != null && files.Length != 0)
             {
-                //Console.WriteLine(files[0]);
                 MessageBox.Show("Đã gửi file thành công");
                 sendfile(files[0]);
-
             }
         }
     }
