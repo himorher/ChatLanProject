@@ -14,6 +14,7 @@ using System.IO;
 
 namespace ChatLanProject
 {
+    //listView1.Items.Add(client.RemoteEndPoint.ToString() + " is connected");
     public partial class Server : Form
     {
         public Server()
@@ -23,9 +24,8 @@ namespace ChatLanProject
         IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
         Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         List<Socket> listClient = new List<Socket>();
-
         void connect() // hàm dùng để kết nối với các client
-        {            
+        {
             server.Bind(ipe);
             Thread listen = new Thread(() =>
             {
@@ -34,7 +34,7 @@ namespace ChatLanProject
                     while (true)
                     {
                         server.Listen(100);
-                        Socket client = server.Accept();                        
+                        Socket client = server.Accept();
                         listClient.Add(client);
                         Thread receive_thr = new Thread(receive);
                         receive_thr.Start(client);
@@ -44,21 +44,20 @@ namespace ChatLanProject
                 {
                     IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
                     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    
-                }
 
+                }
             });
             listen.Start();
         }
-       void receive(object? obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
+        void receive(object? obj) // hàm nhận message cùng với đó là gửi message đó cho các client còn lại.
         {
             // Socket cli = obj as Socket;
             Socket cli = (Socket)obj;
             try
             {
-                byte[] data = new byte[1024 * 10 * 1024];
                 while (true)
                 {
+                    byte[] data = new byte[1024 * 100 * 1024];
                     //byte[] data = new byte[1024 * 200];
                     cli.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
@@ -82,23 +81,27 @@ namespace ChatLanProject
                     foreach (Socket item in listClient)
                     {
                         if (item != null && item != cli) item.Send(data);
+                       
                     }
                     if (mess[0] == '*')
                     {
                         //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
                         string mess_new = Encoding.UTF8.GetString(temp);
                         //string.Join("", newmess);
-                         listView1.Items.Add(mess_new);
+                        listView1.Items.Add(mess_new);
                     }
                     else
                     {
-                        doChat(cli, data);
+                        if (data.Length > 0)
+                        {
+                            doChat(cli, data);
+                        }
                     }
 
                 }
             }
             catch
-            {                
+            {
                 listClient.Remove(cli);
                 cli.Close();
             }
@@ -132,10 +135,17 @@ namespace ChatLanProject
                 MessageBox.Show(ex.Message);
             }
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //button start
         {
             listView1.Items.Add("Server is ready...");
+            button1.Enabled = false;
             connect();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {          
+            this.Close();
+            Application.Exit();
         }
     }
 }

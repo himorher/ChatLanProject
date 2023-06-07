@@ -99,7 +99,7 @@ namespace ChatLanProject
             {                
                 while (true)
                 {
-                    byte[] data = new byte[1024 * 10 * 1024];
+                    byte[] data = new byte[1024 * 100 * 1024];
                     //byte[] data = new byte[1024 * 200];
                     client.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
