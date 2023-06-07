@@ -35,7 +35,7 @@ namespace ChatLanProject
                     {
                         server.Listen(100);
                         Socket client = server.Accept();
-                        //listView1.Items.Add("Client is connected");
+                        listView1.Items.Add(client.RemoteEndPoint.ToString() + " is connected");
                         listClient.Add(client);
                         Thread receive_thr = new Thread(receive);
                         receive_thr.Start(client);
@@ -45,6 +45,7 @@ namespace ChatLanProject
                 {
                     IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
                     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    
                 }
 
             });
@@ -88,7 +89,7 @@ namespace ChatLanProject
                         //string[] newmess = mess.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
                         string mess_new = Encoding.UTF8.GetString(temp);
                         //string.Join("", newmess);
-                        listView1.Items.Add(mess_new);
+                         listView1.Items.Add(mess_new);
                     }
                     else
                     {
@@ -98,7 +99,7 @@ namespace ChatLanProject
                 }
             }
             catch
-            {
+            {                
                 listClient.Remove(cli);
                 cli.Close();
             }

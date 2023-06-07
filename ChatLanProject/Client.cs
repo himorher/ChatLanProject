@@ -54,6 +54,7 @@ namespace ChatLanProject
                 try
                 {
                     client.Connect(ipe);
+                    //send(" is connected");
                 }
                 catch
                 {
@@ -82,8 +83,8 @@ namespace ChatLanProject
 
         private void button3_Click(object sender, EventArgs e) //button disconnect
         {
-            string temp = textBox1.Text + " is disconnected";
-            send(temp);
+            
+            send("is disconnected");
             Close();
         }
 
@@ -98,7 +99,7 @@ namespace ChatLanProject
             {                
                 while (true)
                 {
-                    byte[] data = new byte[1024 * 2000 * 1024];
+                    byte[] data = new byte[1024 * 10 * 1024];
                     //byte[] data = new byte[1024 * 200];
                     client.Receive(data);
                     string mess = Encoding.UTF8.GetString(data);
