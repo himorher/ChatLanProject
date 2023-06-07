@@ -20,7 +20,7 @@ namespace ChatLanProject
         {
             InitializeComponent();
         }
-        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 51000);
+        IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
         Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         List<Socket> listClient = new List<Socket>();
 
@@ -43,7 +43,7 @@ namespace ChatLanProject
                 }
                 catch
                 {
-                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 51000);
+                    IPEndPoint ipe = new IPEndPoint(IPAddress.Any, 55000);
                     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 }
 
@@ -56,7 +56,7 @@ namespace ChatLanProject
             Socket cli = (Socket)obj;
             try
             {
-                byte[] data = new byte[1024 * 2000 * 1024];
+                byte[] data = new byte[1024 * 10 * 1024];
                 while (true)
                 {
                     //byte[] data = new byte[1024 * 200];
