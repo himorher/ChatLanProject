@@ -25,7 +25,7 @@ namespace ChatLanProject
         List<Socket> listClient = new List<Socket>();
 
         void connect() // hàm dùng để kết nối với các client
-        {
+        {            
             server.Bind(ipe);
             Thread listen = new Thread(() =>
             {
@@ -34,8 +34,7 @@ namespace ChatLanProject
                     while (true)
                     {
                         server.Listen(100);
-                        Socket client = server.Accept();
-                        listView1.Items.Add(client.RemoteEndPoint.ToString() + " is connected");
+                        Socket client = server.Accept();                        
                         listClient.Add(client);
                         Thread receive_thr = new Thread(receive);
                         receive_thr.Start(client);

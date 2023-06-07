@@ -54,7 +54,7 @@ namespace ChatLanProject
                 try
                 {
                     client.Connect(ipe);
-                    //send(" is connected");
+                    send(" is connected");
                 }
                 catch
                 {
